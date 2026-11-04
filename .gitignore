@@ -1,0 +1,17 @@
+# Артефакти збірки
+*.app/
+ShotShot
+*.o
+*.dSYM/
+
+# Згенеровані ключі/сертифікати (ніколи не комітити!)
+*.pem
+*.p12
+*.key
+*.cer
+*.crt
+*.keychain
+*.keychain-db
+
+# macOS
+.DS_Store
