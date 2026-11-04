@@ -274,6 +274,12 @@ final class OverlayView: NSView {
 
     override func keyDown(with event: NSEvent) {
         if Int(event.keyCode) == 53 { onFinish?(); return }   // Esc
+        // ⌘C — копіювати виділений скрін (коли вже є зона)
+        if event.modifierFlags.contains(.command),
+           event.charactersIgnoringModifiers?.lowercased() == "c",
+           phase == .annotating, selection != nil {
+            copyShot(); return
+        }
         super.keyDown(with: event)
     }
 
@@ -359,11 +365,25 @@ final class OverlayView: NSView {
     private func positionToolbar() {
         guard let bar = toolbar, let sel = selection else { return }
         let barW = bar.frame.width, barH = bar.frame.height
-        var by = sel.minY - barH - 8
-        if by < 4 { by = sel.maxY + 8 }
+        let margin: CGFloat = 8
+        // спершу — під виділенням
+        var by = sel.minY - barH - margin
+        if by < margin {
+            // не влазить знизу — пробуємо над виділенням
+            let above = sel.maxY + margin
+            if above + barH <= bounds.maxY - margin {
+                by = above
+            } else {
+                // не влазить ні знизу, ні зверху (виділено весь екран) —
+                // кладемо тулбар усередину виділення, біля нижнього краю
+                by = sel.minY + margin
+            }
+        }
+        // фінальне обмеження у межах видимої області
+        by = max(margin, min(by, bounds.maxY - barH - margin))
         var bx = sel.minX
-        if bx + barW > bounds.maxX { bx = bounds.maxX - barW - 4 }
-        if bx < 4 { bx = 4 }
+        if bx + barW > bounds.maxX { bx = bounds.maxX - barW - margin }
+        if bx < margin { bx = margin }
         bar.frame = CGRect(x: bx, y: by, width: barW, height: barH)
     }
 
