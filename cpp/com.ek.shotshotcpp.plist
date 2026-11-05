@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.ek.shotshotcpp</string>
+    <!-- Через LaunchServices (open), щоб TCC-грант «Запис екрана» привʼязувався
+         до bundle id com.ek.shotshotcpp. -W: open живе, поки застосунок живий. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/open</string>
+        <string>-W</string>
+        <string>/Users/ek/ShotShot/cpp/ShotShotCpp.app</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>

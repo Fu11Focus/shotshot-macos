@@ -1,5 +1,20 @@
 # ShotShot
 
+> **Active version is now the C++ rewrite in [`cpp/`](cpp/README.md).**
+> A single-process port alone saved almost nothing (14 → 13 MB) — AppKit +
+> ScreenCaptureKit + Metal dominate regardless of language. The real win came
+> from a **two-process split**: a tiny C++ daemon (`CGEventTap` on ⌘⇧7, **no
+> AppKit**, **~2.1 MB** idle) that spawns the annotation editor on demand; the
+> editor captures → annotates → copies/saves → exits, so the heavy UI is only
+> resident during a capture. Idle dropped **14 MB → ~2.1 MB**.
+>
+> Trade-offs: **no persistent menubar ✂︎ icon** (quit with `pkill ShotShotCpp`),
+> and two permissions — **Accessibility** for the daemon (`CGEventTap`) and
+> **Screen Recording** for the editor. The C++ daemon is what autostarts
+> (LaunchAgent `com.ek.shotshotcpp`); the Swift version was removed from Login
+> Items. The Swift sources below remain the original design/reference. See
+> [`cpp/README.md`](cpp/README.md) for details and the permission-order gotchas.
+
 A minimal, native (arm64, **no Rosetta**) LightShot alternative for macOS: capture a screen region, annotate it, copy or save.
 
 Screenshots are taken via **ScreenCaptureKit** — the modern, non-deprecated API.
